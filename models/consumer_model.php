@@ -357,7 +357,7 @@ class Consumer implements ApiCrud
 
     /**
      * @param $id
-     * @return array|null
+     * @return array
      */
     public static function getId($id)
     {
@@ -376,22 +376,7 @@ class Consumer implements ApiCrud
 
                 $customer = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                $customerObject = array(
-                    "account_no" => $customer['account_no'],
-                    "connection_code" => $customer['connection_code'],
-                    "consumer_name" => $customer['consumer_name'],
-                    "zone_id" => $customer['zone_id'],
-                    "zone_name" => $customer['zone_name'],
-                    "route_id" => $customer['route_id'],
-                    "route_name" => $customer['route_name'],
-                    "plot_number" => $customer['plot_number'],
-                    "balance" => $customer['balance'],
-                    "serial_no" => $customer['serial_no'],
-                    "phone_number" => $customer['phone_number'],
-                    "connection_status" => $customer['connection_status']
-                );
-
-                return $customerObject;
+                return $customer;
             }
 
 
@@ -400,7 +385,7 @@ class Consumer implements ApiCrud
                 'statusCode' => 500,
                 'message' => "Error " . $e->getMessage()
             )));
-            return null;
+            return [];
         }
     }
 
@@ -409,7 +394,29 @@ class Consumer implements ApiCrud
      */
     public static function all()
     {
-        // TODO: Implement all() method.
+        global $conn;
+        try{
+
+            $stmt = $conn->prepare("SELECT * FROM consumers WHERE 1");
+            $stmt->execute();
+            if($stmt->rowCount() > 0){
+                $consumers = [];
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                    $consumers[] = $row;
+                }
+
+                return $consumers;
+            }else{
+                return [];
+            }
+
+        } catch (PDOException $e){
+            print_r(json_encode(array(
+                'statusCode' => 500,
+                'message' => "Error " . $e->getMessage()
+            )));
+            return [];
+        }
     }
 
 }
