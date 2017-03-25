@@ -22,7 +22,7 @@ class DB
                 $this->databaseUser,
                 $this->password
             );
-            echo "connected to ".$this->databaseName;
+
             return $this->conn;
 
         } catch (PDOException $e){

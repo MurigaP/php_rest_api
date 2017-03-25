@@ -7,6 +7,7 @@
  */
 
 require_once __DIR__ . '/../db/db_connection.php';
+require_once 'crud_interface.php';
 
 class Consumer implements ApiCrud
 {
