@@ -390,7 +390,7 @@ class Consumer implements ApiCrud
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public static function all()
     {
