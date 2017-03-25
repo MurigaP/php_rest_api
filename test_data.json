@@ -1,0 +1,19 @@
+/*
+use this file for test in post put , delete method
+*/
+
+{
+  "id": "1",
+  "account_no": "1245",
+  "connection_code": "#1244",
+  "consumer_name": "test consumer name",
+  "zone_id": "8449",
+  "zone_name": "nyeri",
+  "route_id": "345",
+  "route_name": "nyeri-kamakwa",
+  "plot_number": "#PLOT3564",
+  "balance": "400",
+  "serial_no": "SERIAL11223",
+  "phone_number": "+3444955055",
+  "connection_status": "Active"
+}
