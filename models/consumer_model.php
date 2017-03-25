@@ -242,8 +242,21 @@ class Consumer implements ApiCrud
 
         try {
 
-            $stmt = $conn->prepare("INSERT INTO consumers(account_no, connection_code, consumer_name, zone_id, zone_name, route_id, route_name, plot_number, balance, serial_no, phone_number, connection_status) 
-                                    VALUES(:account_no, :connection_code, :consumer_name, :zone_id, :zone_name, :route_id, :route_name, :plot_number, :balance, :serial_no, :phone_number, :connection_status)");
+            $stmt = $conn->prepare("INSERT INTO consumers(
+                                    account_no, connection_code, 
+                                    consumer_name, zone_id,
+                                    zone_name, route_id,
+                                    route_name, plot_number,
+                                    balance, serial_no,
+                                    phone_number, connection_status
+                                      ) 
+                                    VALUES(
+                                    :account_no, :connection_code, 
+                                    :consumer_name, :zone_id, :zone_name, 
+                                    :route_id, :route_name, :plot_number,
+                                    :balance, :serial_no, :phone_number,
+                                    :connection_status
+                                    )");
 
             $stmt->bindParam(":account_no", $accountNo);
             $stmt->bindParam(":connection_code", $connectionCode);
@@ -372,8 +385,7 @@ class Consumer implements ApiCrud
 
             if ($stmt->rowCount() != 1) {
                 return [];
-            }
-            else {
+            } else {
 
                 $customer = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -396,22 +408,22 @@ class Consumer implements ApiCrud
     public static function all()
     {
         global $conn;
-        try{
+        try {
 
             $stmt = $conn->prepare("SELECT * FROM consumers WHERE 1");
             $stmt->execute();
-            if($stmt->rowCount() > 0){
+            if ($stmt->rowCount() > 0) {
                 $consumers = [];
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $consumers[] = $row;
                 }
 
                 return $consumers;
-            }else{
+            } else {
                 return [];
             }
 
-        } catch (PDOException $e){
+        } catch (PDOException $e) {
             print_r(json_encode(array(
                 'statusCode' => 500,
                 'message' => "Error " . $e->getMessage()
