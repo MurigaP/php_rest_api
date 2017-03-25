@@ -339,13 +339,13 @@ class Consumer implements ApiCrud
     {
         global $conn;
 
-        try{
+        try {
             $stmt = $conn->prepare("DELETE FROM consumers WHERE  id=:id");
             $stmt->bindParam(":id", $id);
             $stmt->execute();
             return true;
 
-        } catch (PDOException $e){
+        } catch (PDOException $e) {
             print_r(json_encode(array(
                 'statusCode' => 500,
                 'message' => "Error " . $e->getMessage()
@@ -357,11 +357,51 @@ class Consumer implements ApiCrud
 
     /**
      * @param $id
-     * @return mixed
+     * @return array|null
      */
     public static function getId($id)
     {
-        // TODO: Implement getId() method.
+        global $conn;
+
+        try {
+
+            $stmt = $conn->prepare("SELECT * FROM consumers WHERE id=:id");
+            $stmt->bindParam(":id", $id);
+            $stmt->execute();
+
+            if ($stmt->rowCount() != 1) {
+                return [];
+            }
+            else {
+
+                $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $customerObject = array(
+                    "account_no" => $customer['account_no'],
+                    "connection_code" => $customer['connection_code'],
+                    "consumer_name" => $customer['consumer_name'],
+                    "zone_id" => $customer['zone_id'],
+                    "zone_name" => $customer['zone_name'],
+                    "route_id" => $customer['route_id'],
+                    "route_name" => $customer['route_name'],
+                    "plot_number" => $customer['plot_number'],
+                    "balance" => $customer['balance'],
+                    "serial_no" => $customer['serial_no'],
+                    "phone_number" => $customer['phone_number'],
+                    "connection_status" => $customer['connection_status']
+                );
+
+                return $customerObject;
+            }
+
+
+        } catch (PDOException $e) {
+            print_r(json_encode(array(
+                'statusCode' => 500,
+                'message' => "Error " . $e->getMessage()
+            )));
+            return null;
+        }
     }
 
     /**
