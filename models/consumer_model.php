@@ -333,10 +333,25 @@ class Consumer implements ApiCrud
 
     /**
      * @param $id
-     * @return mixed
+     * @return bool
      */
     public static function delete($id)
     {
+        global $conn;
+
+        try{
+            $stmt = $conn->prepare("DELETE FROM consumers WHERE  id=:id");
+            $stmt->bindParam(":id", $id);
+            $stmt->execute();
+            return true;
+
+        } catch (PDOException $e){
+            print_r(json_encode(array(
+                'statusCode' => 500,
+                'message' => "Error " . $e->getMessage()
+            )));
+            return false;
+        }
 
     }
 
