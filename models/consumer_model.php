@@ -239,7 +239,7 @@ class Consumer implements ApiCrud
         $phoneNumber = $this->getPhoneNumber();
         $connectionStatus = $this->getConnectionStatus();
 
-        try{
+        try {
 
             $stmt = $conn->prepare("INSERT INTO consumers(account_no, connection_code, consumer_name, zone_id, zone_name, route_id, route_name, plot_number, balance, serial_no, phone_number, connection_status) 
                                     VALUES(:account_no, :connection_code, :consumer_name, :zone_id, :zone_name, :route_id, :route_name, :plot_number, :balance, :serial_no, :phone_number, :connection_status)");
@@ -261,7 +261,7 @@ class Consumer implements ApiCrud
             return true;
 
 
-        } catch (PDOException $e){
+        } catch (PDOException $e) {
 
             print_r(json_encode(array(
                 'statusCode' => 500,
@@ -271,17 +271,64 @@ class Consumer implements ApiCrud
         }
 
 
-
-
     }
 
     /**
      * @param $id
-     * @return mixed
+     * @return bool
      */
     public function update($id)
     {
-        // TODO: Implement update() method.
+        global $conn;
+
+        $accountNo = $this->getAccountNo();
+        $connectionCode = $this->getConnectionCode();
+        $customerName = $this->getConsumerName();
+        $zoneId = $this->getZoneId();
+        $zoneName = $this->getZoneName();
+        $routeId = $this->getRouteId();
+        $routeName = $this->getRouteName();
+        $plotNumber = $this->getPlotNumber();
+        $balance = $this->getBalance();
+        $serialNo = $this->getSerialNo();
+        $phoneNumber = $this->getPhoneNumber();
+        $connectionStatus = $this->getConnectionStatus();
+
+        try {
+
+            $stmt = $conn->prepare("UPDATE consumers SET account_no=:account_no, connection_code=:connection_code,
+                                consumer_name=:consumer_name, zone_id=:zone_id, zone_name=:zone_name,
+                                route_id=:route_id, route_name=:route_name, plot_number=:plot_number,
+                                balance=:balance, serial_no=:serial_no, phone_number=:phone_number,
+                                connection_status=:connection_status
+                                WHERE id=:id");
+
+            $stmt->bindParam(":id", $id);
+            $stmt->bindParam(":account_no", $accountNo);
+            $stmt->bindParam(":connection_code", $connectionCode);
+            $stmt->bindParam(":consumer_name", $customerName);
+            $stmt->bindParam(":zone_id", $zoneId);
+            $stmt->bindParam(":zone_name", $zoneName);
+            $stmt->bindParam(":route_id", $routeId);
+            $stmt->bindParam(":route_name", $routeName);
+            $stmt->bindParam(":plot_number", $plotNumber);
+            $stmt->bindParam(":balance", $balance);
+            $stmt->bindParam(":serial_no", $serialNo);
+            $stmt->bindParam(":phone_number", $phoneNumber);
+            $stmt->bindParam(":connection_status", $connectionStatus);
+
+            $stmt->execute();
+            return true;
+
+        } catch (PDOException $e) {
+            print_r(json_encode(array(
+                'statusCode' => 500,
+                'message' => "Error " . $e->getMessage()
+            )));
+            return false;
+        }
+
+
     }
 
     /**
@@ -290,7 +337,7 @@ class Consumer implements ApiCrud
      */
     public static function delete($id)
     {
-        // TODO: Implement delete() method.
+
     }
 
     /**
